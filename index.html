@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>off policy, inc.</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect x=%274%27 y=%274%27 width=%2724%27 height=%2724%27 fill=%27%23E52228%27/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#FAFAF7">
 <meta name="description" content="off policy is an independent AI laboratory following interesting questions wherever they lead.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap">
 <style>
@@ -61,24 +64,34 @@ a { color: inherit; } button { font: inherit; color: inherit; }
 /* ---------- research explorer ---------- */
 .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; padding-block: 72px 28px; border-top: 1px solid var(--line); }
 .sec-head h2 { margin: 0; font: 600 40px/44px var(--op-sans); letter-spacing: -.03em; }
-.explorer { display: grid; grid-template-columns: 280px 0px minmax(0, 1fr); height: min(78vh, 780px); min-height: 520px; border-top: 1px solid var(--op-ink); border-bottom: 1px solid var(--line); transition: grid-template-columns .55s cubic-bezier(.7, 0, .2, 1); }
-.explorer.open { grid-template-columns: 280px minmax(0, 1.1fr) minmax(0, 1fr); }
-.index { overflow-y: auto; padding: 24px 24px 24px 0; border-right: 1px solid var(--line); min-height: 0; }
-.index h3 { margin: 22px 0 6px; font: 400 12px/18px var(--op-mono); color: var(--op-gray); display: flex; align-items: center; gap: 8px; } .index h3:first-child { margin-top: 0; } .index h3 svg { color: var(--op-ink); }
-.row { display: flex; align-items: baseline; gap: 12px; width: 100%; padding: 5px 0; border: 0; background: none; cursor: pointer; text-align: left; font: 400 15px/22px var(--op-sans); }
-.row .t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .row .d { font: 400 12px/18px var(--op-mono); color: var(--op-gray); font-variant-numeric: tabular-nums; }
+.explorer { display: grid; grid-template-columns: 300px 0px minmax(0, 1fr); height: min(78vh, 780px); min-height: 520px; border-top: 1px solid var(--op-ink); border-bottom: 1px solid var(--line); transition: grid-template-columns .55s cubic-bezier(.7, 0, .2, 1); }
+.explorer.open { grid-template-columns: 300px minmax(0, 1.1fr) minmax(0, 1fr); }
+.index { overflow-y: auto; padding: 8px 28px 24px 0; border-right: 1px solid var(--line); min-height: 0; }
+.row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 16px; width: 100%; padding: 14px 0; border: 0; border-bottom: 1px solid var(--line); background: none; cursor: pointer; text-align: left; font: 400 15px/21px var(--op-sans); }
+.row:last-child { border-bottom: 0; }
+.row .t { text-wrap: balance; } .row .d { font: 400 12px/18px var(--op-mono); color: var(--op-gray); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .row:hover .t { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-.row[aria-pressed="true"] .t { font-weight: 500; } .row[aria-pressed="true"] .d { color: var(--op-signal); } .row[aria-pressed="true"]::before { content: ""; width: 8px; height: 8px; background: var(--op-signal); align-self: center; flex: none; }
+.row[aria-pressed="true"] .t { font-weight: 500; } .row[aria-pressed="true"] .d { color: var(--op-signal); }
+.row[aria-pressed="true"]::before { content: ""; position: absolute; left: -20px; top: 21px; width: 8px; height: 8px; background: var(--op-signal); }
 .panel { overflow: hidden; min-width: 0; } .explorer.open .panel { border-right: 1px solid var(--line); }
 .pin { height: 100%; overflow-y: auto; padding: 28px 40px 40px; display: flex; flex-direction: column; gap: 20px; }
 .pin h3 { margin: 0; font: 600 32px/36px var(--op-sans); letter-spacing: -.025em; text-wrap: balance; max-width: 18em; }
 .pin p { margin: 0; max-width: 36em; font-size: 16px; line-height: 26px; } .pin .by { color: var(--op-gray); font-size: 14px; } .pin .label { margin-bottom: -4px; }
 .pin .bars { max-width: 420px; } .pin .actions { margin-top: 8px; }
 #dots { width: 100%; height: 100%; display: block; min-width: 0; cursor: crosshair; }
+/* mobile: a scrolling story. The dot canvas sticks at the top; projects scroll beneath and the dots redraw into the one you're reading */
+.stack { display: none; }
 @media (max-width: 900px) {
-  .explorer, .explorer.open { grid-template-columns: 1fr; grid-template-rows: auto auto 56vh; height: auto; }
-  .index { max-height: 240px; border-right: 0; border-bottom: 1px solid var(--line); padding-right: 0; }
-  .panel { display: none; } .explorer.open .panel { display: block; border-right: 0; border-bottom: 1px solid var(--line); } .pin { height: auto; padding-inline: 0; }
+  .explorer, .explorer.open { display: block; height: auto; min-height: 0; border-bottom: 0; }
+  .index, .panel { display: none; }
+  #dots { position: sticky; top: 0; z-index: 5; width: calc(100% + 2 * var(--margin)); max-width: none; margin-inline: calc(-1 * var(--margin)); height: 46vh; min-height: 280px; background: var(--op-paper); border-bottom: 1px solid var(--line); }
+  .stack { display: block; position: relative; z-index: 1; }
+  .m-item { padding: 28px 0 36px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 16px; min-height: 44vh; }
+  .m-item:last-child { border-bottom: 0; }
+  .m-item h3 { margin: 0; font: 600 26px/30px var(--op-sans); letter-spacing: -.025em; text-wrap: balance; }
+  .m-item .q p { font-size: 15px; line-height: 24px; }
+  .m-item .actions { gap: 12px 20px; }
+  .m-item[aria-current="true"] h3::before { content: ""; display: inline-block; width: .3em; height: .3em; margin-right: .35em; vertical-align: .12em; background: var(--op-signal); }
 }
 @media (prefers-reduced-motion: reduce) { .explorer { transition: none; } }
 
@@ -87,13 +100,13 @@ a { color: inherit; } button { font: inherit; color: inherit; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 0; background: none; padding: 6px 12px; cursor: pointer; font: 400 13px/18px var(--op-mono); }
 .chip:hover { border-color: var(--op-ink); } .chip[aria-pressed="true"] { background: var(--op-ink); color: var(--op-paper); border-color: var(--op-ink); }
-.entry { display: grid; grid-template-columns: 96px minmax(0, 1fr) 120px; gap: 6px 24px; padding: 20px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.entry { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 24px; padding: 20px 0; border-top: 1px solid var(--line); align-items: baseline; }
 .entry .day, .entry .tag { font: 400 12px/18px var(--op-mono); color: var(--op-gray); font-variant-numeric: tabular-nums; }
 .entry .tag { display: flex; align-items: center; gap: 8px; justify-content: flex-end; } .entry .tag svg { color: var(--op-ink); }
 .entry h3 { margin: 0 0 8px; font: 500 17px/24px var(--op-sans); } .entry h3 button { all: unset; cursor: pointer; } .entry h3 button:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; } .entry h3 button:focus-visible { outline: 2px solid var(--op-ink); outline-offset: 3px; }
 .entry p { margin: 0; font-size: 15px; line-height: 22px; color: #3a3a3a; max-width: 40em; } .entry .bars { max-width: 460px; gap: 8px; }
 .entry[hidden] { display: none; }
-@media (max-width: 760px) { .entry { grid-template-columns: 1fr; } .entry .tag { justify-content: flex-start; } }
+@media (max-width: 760px) { .entry { grid-template-columns: 1fr; gap: 4px; padding: 22px 0; } }
 
 /* ---------- about / footer, on ink ---------- */
 .about { background: var(--op-ink); color: var(--op-paper); }
@@ -112,6 +125,26 @@ a { color: inherit; } button { font: inherit; color: inherit; }
 .entry .src { margin-top: 8px; font: 400 12px/18px var(--op-mono); color: var(--op-gray); }
 .about .foot a { color: inherit; text-decoration: none; } .about .foot a:hover { color: var(--op-paper); }
 
+/* the featured line, set like a terminal prompt on a signal-red ribbon */
+.ribbon { align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 7px 12px 7px 10px; background: var(--op-signal); color: var(--op-paper); font: 400 12px/16px var(--op-mono); letter-spacing: .01em; }
+.ribbon .prompt { opacity: .75; }
+.ribbon .cursor { display: inline-block; width: .55em; height: 1.1em; background: var(--op-paper); margin-left: -2px; }
+@media (max-width: 760px) { .ribbon { font-size: 11px; padding: 6px 10px 6px 8px; gap: 8px; } }
+
+/* phone polish */
+@media (max-width: 760px) {
+  .top { gap: 14px; }
+  .top nav { font-size: 13px; }
+  .feature { row-gap: 32px; }
+  .f-art canvas { aspect-ratio: 1 / 1; }
+  .actions { gap: 12px 20px; }
+  .btn { padding: 12px 16px; }
+  .sec-head { padding-block: 56px 20px; }
+  .sec-head h2 { font-size: 32px; line-height: 36px; }
+  .log { padding-bottom: 64px; }
+  .about .wrap { padding-block: 64px 40px; row-gap: 28px; }
+}
+
 </style>
 </head>
 <body>
@@ -122,11 +155,11 @@ a { color: inherit; } button { font: inherit; color: inherit; }
 <main>
   <section class="feature wrap" aria-labelledby="f-title">
     <div class="f-copy">
-      <p class="label"><span class="sq" aria-hidden="true"></span>Featured · field notes · 25 September 2026</p>
+      <p class="ribbon"><span class="prompt" aria-hidden="true">&gt;</span><span>featured · 25 sep 2026</span><span class="cursor" aria-hidden="true"></span></p>
       <h1 id="f-title">Introducing wc3env</h1>
       <p class="sub">Warcraft III as an environment and benchmark.</p>
       <p class="by">Peter Wang and Nico Christie</p>
-      <p class="actions"><a class="btn" href="https://pwang724.github.io/wc3env/" target="_blank" rel="noopener noreferrer">Read the field notes</a><a class="link" href="https://github.com/pwang724/wc3env" target="_blank" rel="noopener noreferrer">Code on GitHub</a></p>
+      <p class="actions"><a class="btn" href="https://pwang724.github.io/wc3env/" target="_blank" rel="noopener noreferrer">Read the post</a><a class="link" href="https://github.com/pwang724/wc3env" target="_blank" rel="noopener noreferrer">Code on GitHub</a></p>
     </div>
     <figure class="f-art">
       <canvas id="featureDots" role="img" aria-label="Illustrative map of one game: our base at lower left, a cleared creep camp in the middle, the enemy base and towers at upper right. Dashed gray lines show the plan; one red path shows the army walking into the enemy towers."></canvas>
@@ -134,17 +167,17 @@ a { color: inherit; } button { font: inherit; color: inherit; }
   </section>
 
   <section id="research" class="wrap" aria-labelledby="r-title">
-    <div class="sec-head"><h2 id="r-title">Research</h2><p class="label">Everything here is Peter Wang and Nico Christie. Pick one; the dots redraw it.</p></div>
+    <div class="sec-head"><h2 id="r-title">Research</h2></div>
     <div class="explorer" id="explorer">
       <div class="index" id="index" aria-label="Projects"></div>
       <div class="panel"><div class="pin" id="pin"></div></div>
       <canvas id="dots" role="img" aria-label="A field of dots that draws the selected project"></canvas>
+      <div class="stack" id="stack"></div>
     </div>
   </section>
 
   <section class="log wrap" id="log" aria-labelledby="l-title">
     <div class="sec-head"><h2 id="l-title">Log</h2><p class="label" id="count"></p></div>
-    <div class="chips" id="chips" role="group" aria-label="Filter by type"></div>
     <div class="feed" id="feed"></div>
   </section>
 </main>
@@ -1226,7 +1259,7 @@ a { color: inherit; } button { font: inherit; color: inherit; }
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   function fmtDate(d, short) { var p = d.split('-'); return +p[2] + ' ' + (short ? MONTHS[+p[1] - 1].slice(0, 3) : MONTHS[+p[1] - 1]); }
   function ext(href, label, cls) { return '<a class="' + (cls || 'link') + '" href="' + href + '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>'; }
-  function quoteHTML(q) { return '<blockquote class="q">' + q.text.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '<footer>' + (q.url ? ext(q.url, q.by, 'who') : '<span class="who">' + esc(q.by) + '</span>') + (q.where ? ' \u00b7 ' + esc(q.where) : ' on X') + '</footer></blockquote>'; }
+  function quoteHTML(q) { return '<blockquote class="q">' + q.text.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '<footer>' + (q.url ? ext(q.url, q.by, 'who') : '<span class="who">' + esc(q.by) + '</span>') + (q.url ? ' on X' : '') + '</footer></blockquote>'; }
 
   /* ---------- compositions, drawn in the art palette then sampled into dots.
      ink = ink, blue = the plan (renders gray), orange = what happened (renders red) ---------- */
@@ -1353,14 +1386,11 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     var ex = document.getElementById('explorer'), index = document.getElementById('index'), pin = document.getElementById('pin'), active = -1;
     var field = DotField(document.getElementById('dots'), { grid: 3.2 });
     function idle() { field.show(function (c, W, H) { return drawTrace(c, W, H); }); }
-    TYPES.forEach(function (t) {
-      var mine = PROJECTS.filter(function (p) { return p.type === t.id; }); if (!mine.length) return;
-      var h = document.createElement('h3'); h.innerHTML = icon(t.id, 10) + ' ' + t.name; index.appendChild(h);
-      mine.forEach(function (p) { var b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', 'false'); b.dataset.i = PROJECTS.indexOf(p); b.innerHTML = '<span class="t"></span><span class="d">' + fmtDate(p.date, true) + '</span>'; b.firstChild.textContent = p.title; b.onclick = function () { var i = +b.dataset.i; select(active === i ? -1 : i); }; index.appendChild(b); });
-    });
+    PROJECTS.forEach(function (p, i) { var b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', 'false'); b.dataset.i = i; b.innerHTML = '<span class="t"></span><span class="d">' + fmtDate(p.date, true) + '</span>'; b.firstChild.textContent = p.title; b.onclick = function () { select(active === i ? -1 : i); }; index.appendChild(b); });
+    function bodyHTML(p) { return '<p class="label">' + fmtDate(p.date) + ' 2026' + (p.views ? ' \u00b7 ' + p.views + ' views' : '') + '</p><h3>' + esc(p.title) + '</h3>' + p.quotes.map(quoteHTML).join('') + '<p class="actions">' + p.links.map(function (l, k) { return ext(l[1], l[0], k ? 'link' : 'btn'); }).join('') + '</p>'; }
     function fillPanel(i) {
       var p = PROJECTS[i];
-      pin.innerHTML = '<p class="label">' + icon(p.type) + ' ' + typeOf(p.type).name + ' · ' + fmtDate(p.date) + ' 2026' + (p.views ? ' · ' + p.views + ' views' : '') + '</p><h3>' + esc(p.title) + '</h3>' + p.quotes.map(quoteHTML).join('') + '<p class="actions">' + p.links.map(function (l, k) { return ext(l[1], l[0], k ? 'link' : 'btn'); }).join('') + '</p>';
+      pin.innerHTML = bodyHTML(p);
       pin.scrollTop = 0;
     }
     function select(i) {
@@ -1371,18 +1401,24 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     }
     idle();
 
+    /* ---- mobile: the same work as a scrolling story; the sticky dots follow the item in view ---- */
+    var stack = document.getElementById('stack'), mq = window.matchMedia('(max-width: 900px)'), current = -1;
+    PROJECTS.forEach(function (p, i) { var it = document.createElement('article'); it.className = 'm-item'; it.dataset.i = i; it.innerHTML = bodyHTML(p); stack.appendChild(it); });
+    if ('IntersectionObserver' in window) {
+      var mio = new IntersectionObserver(function (es) { if (!mq.matches) return; es.forEach(function (e) { if (!e.isIntersecting) return; var i = +e.target.dataset.i; if (i === current) return; current = i; stack.querySelectorAll('.m-item').forEach(function (m) { m.setAttribute('aria-current', +m.dataset.i === i ? 'true' : 'false'); }); field.show(function (c, W, H) { return PROJECTS[i].art(c, W, H, rng(7)); }); }); }, { rootMargin: '-55% 0px -35% 0px' });
+      stack.querySelectorAll('.m-item').forEach(function (m) { mio.observe(m); });
+    }
+    mq.addEventListener && mq.addEventListener('change', function () { current = -1; field.later(); if (!mq.matches) { if (active >= 0) select(active); else idle(); } });
+
     /* ---- the log ---- */
-    var feed = document.getElementById('feed'), chips = document.getElementById('chips'), count = document.getElementById('count'), filter = null;
-    function chip(label, id, html) { var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.setAttribute('aria-pressed', id === null ? 'true' : 'false'); b.innerHTML = html + label; b.onclick = function () { filter = id; chips.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); }); apply(); }; chips.appendChild(b); }
-    chip('All', null, ''); TYPES.forEach(function (t) { if (PROJECTS.some(function (p) { return p.type === t.id; })) chip(t.name, t.id, icon(t.id, 11)); });
+    var feed = document.getElementById('feed'), count = document.getElementById('count');
     PROJECTS.forEach(function (p, i) {
       var q = p.quotes[0], el = document.createElement('article'); el.className = 'entry'; el.id = p.id; el.dataset.type = p.type;
-      el.innerHTML = '<span class="day">' + fmtDate(p.date, true) + '</span><div class="body"><h3><button type="button"></button></h3><p>' + esc(q.text.length > 1 ? q.text[1] : q.text[0]) + '</p><p class="src">' + (q.url ? ext(q.url, q.by + (p.views ? ' · ' + p.views + ' views' : ''), 'who') : esc(q.by)) + '</p></div><span class="tag">' + icon(p.type) + ' ' + typeOf(p.type).name + '</span>';
+      el.innerHTML = '<span class="day">' + fmtDate(p.date, true) + '</span><div class="body"><h3><button type="button"></button></h3><p>' + esc(q.text.length > 1 ? q.text[1] : q.text[0]) + '</p><p class="src">' + (q.url ? ext(q.url, q.by + (p.views ? ' · ' + p.views + ' views' : ''), 'who') : esc(q.by)) + '</p></div>';
       var bt = el.querySelector('h3 button'); bt.textContent = p.title; bt.onclick = function () { open(i); }; feed.appendChild(el);
     });
-    function open(i) { document.getElementById('research').scrollIntoView({ behavior: still ? 'auto' : 'smooth' }); if (active !== i) select(i); }
-    function apply() { var n = 0; feed.querySelectorAll('.entry').forEach(function (e) { var show = !filter || e.dataset.type === filter; e.hidden = !show; if (show) n++; }); count.textContent = n + (n === 1 ? ' project' : ' projects'); }
-    apply();
+    function open(i) { if (mq.matches) { var m = stack.querySelector('[data-i="' + i + '"]'); m.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'center' }); return; } document.getElementById('research').scrollIntoView({ behavior: still ? 'auto' : 'smooth' }); if (active !== i) select(i); }
+    count.textContent = PROJECTS.length + ' projects';
     document.querySelectorAll('a[href^="http"]').forEach(function (a) { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
     if (location.hash) { var k = PROJECTS.map(function (p) { return '#' + p.id; }).indexOf(location.hash); if (k >= 0) select(k); }
   }
@@ -1509,8 +1545,8 @@ a { color: inherit; } button { font: inherit; color: inherit; }
   // Newest first. Quotes are exact words from X; links open in a new tab.
   var PROJECTS = [
     { id: 'wc3env', type: 'agents', date: '2026-09-25', art: drawWc3, title: 'Warcraft III as an environment and benchmark',
-      quotes: [{ by: 'Peter Wang and Nico Christie', where: 'field notes', text: ['wc3env turns the real Warcraft III into a gym-style environment, and an LLM agent plays full games on it.'] }],
-      links: [['Read the field notes', 'https://pwang724.github.io/wc3env/'], ['Code on GitHub', 'https://github.com/pwang724/wc3env']] },
+      quotes: [{ by: 'Peter Wang and Nico Christie', text: ['wc3env turns the real Warcraft III into a gym-style environment, and an LLM agent plays full games on it.'] }],
+      links: [['Read the post', 'https://pwang724.github.io/wc3env/'], ['Code on GitHub', 'https://github.com/pwang724/wc3env']] },
     { id: 'gta', type: 'agents', date: '2026-09-24', art: drawGTA, title: 'Jev in GTA 5', views: '14K',
       quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2103186608014991459', text: ['Jev driving cars and shooting cops with rocket launchers in GTA 5', 'It could reliably drive 30 miles/hour and escape 2 star wanted levels in the city', 'We probably aren’t taking system1 model impacts on self driving seriously enough', 'Another fun one with @BrainsAndTennis'] }],
       links: [['On X', 'https://x.com/nicochristie/status/2103186608014991459']] },
