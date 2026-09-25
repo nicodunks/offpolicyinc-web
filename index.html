@@ -1253,39 +1253,47 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     curve(y - s * 0.08, C.blue); curve(y + s * 0.07, C.blue); curve(y + s * 0.2, C.blue, true); curve(y - s * 0.24, C.orange);
     return [x1, y - s * 0.24];
   }
-  function drawWc3(ctx, W, H, R) { // illustrative map of the "into the towers" game from the field notes
+  function drawWc3(ctx, W, H, R) { // illustrative map of the "into the towers" game from the field notes, drawn bold for dots
     ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
-    var bw = Math.min(W, H * 1.3) * 0.94, bh = bw / 1.3, ox = (W - bw) / 2, oy = (H - bh) / 2, lw = Math.max(3, bw / 190), i;
+    var bw = Math.min(W, H * 1.3) * 0.96, bh = bw / 1.3, ox = (W - bw) / 2, oy = (H - bh) / 2, u = bw / 100, i, j;
     function P(x, y) { return [ox + x * bw, oy + y * bh]; }
-    function sq(x, y, s, fill) { var p = P(x, y), h = s * bw / 2; ctx.lineWidth = lw; if (fill) ctx.fillRect(p[0] - h, p[1] - h, h * 2, h * 2); else ctx.strokeRect(p[0] - h, p[1] - h, h * 2, h * 2); }
-    function ring(x, y, r, dash) { var p = P(x, y); ctx.lineWidth = lw; if (dash) ctx.setLineDash(dash); ctx.beginPath(); ctx.arc(p[0], p[1], r * bw, 0, TAU); ctx.stroke(); ctx.setLineDash([]); }
-    function path(pts, col, w, dash) { ctx.strokeStyle = col; ctx.lineWidth = w || lw; ctx.lineCap = 'round'; if (dash) ctx.setLineDash(dash); ctx.beginPath(); pts.forEach(function (q, k) { var p = P(q[0], q[1]); if (k) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); ctx.stroke(); ctx.setLineDash([]); }
-    function curve(a, b, c, d) { var out = []; for (var t = 0; t <= 1.0001; t += 0.02) { var u = 1 - t; out.push([u * u * u * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t * t * t * d[0], u * u * u * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t * t * t * d[1]]); } return out; }
-    // map coordinates: quiet crosses
-    ctx.strokeStyle = C.blue; ctx.lineWidth = lw * 0.9; for (var gx = 0; gx <= 1.001; gx += 0.25) for (var gy = 0; gy <= 1.001; gy += 1 / 3) { var p = P(gx, gy), c = bw * 0.006; ctx.beginPath(); ctx.moveTo(p[0] - c, p[1]); ctx.lineTo(p[0] + c, p[1]); ctx.moveTo(p[0], p[1] - c); ctx.lineTo(p[0], p[1] + c); ctx.stroke(); }
-    // our base, bottom left
-    ctx.strokeStyle = C.ink; ctx.fillStyle = C.ink; sq(0.13, 0.8, 0.075); sq(0.13, 0.8, 0.028, true);
-    [[0.04, 0.68], [0.08, 0.66], [0.22, 0.9], [0.26, 0.86], [0.04, 0.93]].forEach(function (f) { sq(f[0], f[1], 0.022, true); });
-    ctx.strokeStyle = C.blue; ring(0.27, 0.66, 0.024); ctx.fillStyle = C.ink; for (i = 0; i < 5; i++) { var q = P(0.2 + i * 0.014, 0.71 - i * 0.01); ctx.beginPath(); ctx.arc(q[0], q[1], bw * 0.004, 0, TAU); ctx.fill(); }
-    // enemy base, top right: five burrows, two towers with their range
-    ctx.strokeStyle = C.ink; [[0.8, 0.13], [0.86, 0.17], [0.91, 0.24], [0.75, 0.2], [0.83, 0.28]].forEach(function (b) { ring(b[0], b[1], 0.02); });
-    ctx.fillStyle = C.ink; [[0.72, 0.31], [0.9, 0.36]].forEach(function (t) { sq(t[0], t[1], 0.018, true); ctx.strokeStyle = C.blue; ring(t[0], t[1], 0.1, [lw * 2, lw * 3]); ctx.strokeStyle = C.ink; });
+    function disk(x, y, r, col, a) { var p = P(x, y); ctx.globalAlpha = a || 1; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r * u, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; }
+    function ring(x, y, r, col, w, dash) { var p = P(x, y); ctx.strokeStyle = col; ctx.lineWidth = w * u; if (dash) ctx.setLineDash(dash.map(function (v) { return v * u; })); ctx.beginPath(); ctx.arc(p[0], p[1], r * u, 0, TAU); ctx.stroke(); ctx.setLineDash([]); }
+    function box(x, y, s, col) { var p = P(x, y), h = s * u / 2; ctx.fillStyle = col; ctx.fillRect(p[0] - h, p[1] - h, h * 2, h * 2); }
+    function line(pts, col, w, dash, a) { ctx.globalAlpha = a || 1; ctx.strokeStyle = col; ctx.lineWidth = w * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; if (dash) ctx.setLineDash(dash.map(function (v) { return v * u; })); ctx.beginPath(); pts.forEach(function (q, k) { var p = P(q[0], q[1]); if (k) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; }
+    function curve(a, b, c, d) { var out = []; for (var t = 0; t <= 1.0001; t += 0.02) { var v = 1 - t; out.push([v * v * v * a[0] + 3 * v * v * t * b[0] + 3 * v * t * t * c[0] + t * t * t * d[0], v * v * v * a[1] + 3 * v * v * t * b[1] + 3 * v * t * t * c[1] + t * t * t * d[1]]); } return out; }
+
+    var ours = [], theirs = [[0.8, 0.13], [0.87, 0.18], [0.92, 0.27], [0.75, 0.21], [0.84, 0.3]], towers = [[0.71, 0.34], [0.93, 0.42]], enemyArmy = [];
+    for (i = 0; i < 7; i++) enemyArmy.push([0.66 + (i % 4) * 0.035, 0.05 + (i / 4 | 0) * 0.045]);
+    var red = curve([0.5, 0.63], [0.43, 0.69], [0.5, 0.26], [0.79, 0.22]);
+    for (i = 0; i < 9; i++) { var t = red[34 + (i % 5) * 3]; ours.push([t[0] + ((i * 37) % 7 - 3) * 0.009, t[1] + ((i * 53) % 5 - 2) * 0.012]); }
+
+    // the observation: faint sight lines from our base to every unit it can see. They break up into scattered dots.
+    var seen = theirs.concat(towers, enemyArmy.filter(function (e, k) { return k % 2 === 0; }), [[0.5, 0.59], [0.27, 0.66], [0.4, 0.25], [0.97, 0.6], [0.6, 0.45]]);
+    [[0.12, 0.8], [0.03, 0.66], [0.27, 0.88]].forEach(function (src, k) { seen.forEach(function (b, n) { if ((n + k) % (k ? 3 : 1)) return; line([src, b], C.ink, 0.3, null, 0.3); }); });
+    // tower range, and the plan out to camp 5 and home again
+    towers.forEach(function (t) { ring(t[0], t[1], 11, C.blue, 0.9, [2.4, 2.4]); });
+    line(curve([0.17, 0.74], [0.28, 0.72], [0.38, 0.6], [0.46, 0.6]), C.blue, 1.8, [4, 3.2]);
+    line(curve([0.5, 0.67], [0.44, 0.78], [0.3, 0.84], [0.2, 0.84]), C.blue, 1.8, [4, 3.2]);
+    // a scout's lap and a hero creeping, lighter
+    line(curve([0.24, 0.92], [0.5, 0.99], [0.84, 0.92], [0.97, 0.6]), C.blue, 0.9, [1, 2.2]);
+    line(curve([0.09, 0.66], [0.1, 0.42], [0.26, 0.28], [0.4, 0.25]), C.ink, 1.4);
+    // our base: town hall, farms, gold mine, workers
+    box(0.12, 0.8, 9, C.ink); ring(0.12, 0.8, 8.2, C.paper, 1.1); box(0.12, 0.8, 3.4, C.ink);
+    [[0.03, 0.66], [0.07, 0.64], [0.23, 0.92], [0.27, 0.88], [0.03, 0.94]].forEach(function (f) { box(f[0], f[1], 3.6, C.ink); });
+    disk(0.27, 0.66, 3.2, C.blue); for (i = 0; i < 5; i++) disk(0.19 + i * 0.014, 0.72 - i * 0.011, 0.9, C.ink);
     // camp 5, cleared
-    ctx.strokeStyle = C.blue; ring(0.5, 0.58, 0.05, [lw * 3, lw * 3]); ctx.strokeStyle = C.ink; ctx.lineWidth = lw; [[0.48, 0.57], [0.52, 0.6], [0.51, 0.55]].forEach(function (x) { var p = P(x[0], x[1]), e = bw * 0.007; ctx.beginPath(); ctx.moveTo(p[0] - e, p[1] - e); ctx.lineTo(p[0] + e, p[1] + e); ctx.moveTo(p[0] + e, p[1] - e); ctx.lineTo(p[0] - e, p[1] + e); ctx.stroke(); });
-    // the plan: out to camp 5 and home again, with the brand's origin tick
-    var o = P(0.18, 0.74); ctx.strokeStyle = C.ink; ctx.lineWidth = lw * 1.2; ctx.beginPath(); ctx.moveTo(o[0] - bw * 0.014, o[1] - bw * 0.014); ctx.lineTo(o[0] + bw * 0.014, o[1] + bw * 0.014); ctx.stroke();
-    path(curve([0.18, 0.74], [0.28, 0.72], [0.38, 0.6], [0.46, 0.59]), C.blue, lw, [lw * 4, lw * 3.5]);
-    path(curve([0.5, 0.64], [0.44, 0.76], [0.3, 0.82], [0.2, 0.83]), C.blue, lw, [lw * 4, lw * 3.5]);
-    // other traffic: a scout, a hero creeping
-    path(curve([0.24, 0.9], [0.5, 0.96], [0.82, 0.9], [0.95, 0.62]), C.blue, lw, [lw, lw * 3]);
-    path(curve([0.1, 0.7], [0.12, 0.45], [0.26, 0.3], [0.38, 0.26]), C.blue, lw);
-    // the enemy army coming home
-    for (i = 0; i < 8; i++) { var e = P(0.69 + (i % 4) * 0.018, 0.04 + (i / 4 | 0) * 0.024 + (i % 2) * 0.006); ctx.fillStyle = C.blue; ctx.beginPath(); ctx.arc(e[0], e[1], bw * 0.0055, 0, TAU); ctx.fill(); }
-    path(curve([0.72, 0.08], [0.74, 0.14], [0.76, 0.19], [0.78, 0.23]), C.blue, lw, [lw, lw * 2.5]);
-    // what happened: attack-move into the base
-    var red = curve([0.5, 0.63], [0.43, 0.69], [0.5, 0.26], [0.8, 0.22]); path(red, C.orange, lw * 1.9); // starts home along the plan, then turns
-    ctx.fillStyle = C.ink; for (i = 0; i < 11; i++) { var t = red[Math.min(red.length - 1, 36 + (i % 6) * 2)], u = P(t[0] + ((i * 7919) % 13 - 6) * 0.0025, t[1] + ((i * 104729) % 11 - 5) * 0.003); ctx.beginPath(); ctx.arc(u[0], u[1], bw * 0.0045, 0, TAU); ctx.fill(); }
-    return P(0.8, 0.22);
+    ring(0.5, 0.59, 5.4, C.blue, 1.6); [[0.48, 0.58], [0.52, 0.61], [0.51, 0.56]].forEach(function (x) { var p = P(x[0], x[1]), e = 1.2 * u; ctx.strokeStyle = C.ink; ctx.lineWidth = 0.9 * u; ctx.beginPath(); ctx.moveTo(p[0] - e, p[1] - e); ctx.lineTo(p[0] + e, p[1] + e); ctx.moveTo(p[0] + e, p[1] - e); ctx.lineTo(p[0] - e, p[1] + e); ctx.stroke(); });
+    // their base: burrows as rings and solid bodies, towers solid
+    theirs.forEach(function (b, k) { if (k % 2) disk(b[0], b[1], 3.1, C.blue); else ring(b[0], b[1], 2.6, C.blue, 1.3); });
+    towers.forEach(function (t) { box(t[0], t[1], 3.4, C.ink); });
+    enemyArmy.forEach(function (e, k) { disk(e[0], e[1], k === 1 ? 1.9 : 1.2, C.blue); });
+    line(curve([0.7, 0.13], [0.72, 0.16], [0.75, 0.19], [0.77, 0.22]), C.blue, 1, [1, 1.8]);
+    // what happened: the army attack-moves into the base; the Tauren Chieftain in front
+    line(red, C.orange, 2.8);
+    ours.forEach(function (o, k) { disk(o[0], o[1], k === 0 ? 2.2 : 1.25, C.ink); });
+    var o = P(0.17, 0.74); ctx.strokeStyle = C.ink; ctx.lineWidth = 1.2 * u; ctx.beginPath(); ctx.moveTo(o[0] - 2 * u, o[1] - 2 * u); ctx.lineTo(o[0] + 2 * u, o[1] + 2 * u); ctx.stroke();
+    return P(0.79, 0.22);
   }
 
   /* ---------- the dot field: one pool, draws once, then holds ---------- */
@@ -1352,7 +1360,7 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* ---- featured ---- */
-    var feat = DotField(document.getElementById('featureDots'), { grid: 1.7, max: 80000 });
+    var feat = DotField(document.getElementById('featureDots'), { grid: 2.6, max: 80000 });
     feat.show(function (c, W, H) { return drawWc3(c, W, H, rng(FEATURED.seed)); });
 
     /* ---- research explorer ---- */
