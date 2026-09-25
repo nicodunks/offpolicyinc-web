@@ -104,6 +104,14 @@ a { color: inherit; } button { font: inherit; color: inherit; }
 .about .foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-top: 24px; border-top: 1px solid rgba(250, 250, 247, .2); font: 400 12px/18px var(--op-mono); color: #a3a3a0; }
 @media (max-width: 900px) { .about h2, .about .pos { grid-column: 1 / -1; } .about h2 { font-size: 40px; line-height: 44px; } }
 
+/* quotes: exact words from X */
+.q { margin: 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--op-ink); display: flex; flex-direction: column; gap: 10px; }
+.q p { margin: 0; font-size: 16px; line-height: 25px; }
+.q footer { font: 400 12px/18px var(--op-mono); color: var(--op-gray); }
+.q .who, .entry .src .who { color: var(--op-ink); text-decoration: none; border-bottom: 1px solid var(--line); } .q .who:hover, .entry .src .who:hover { color: var(--op-signal); border-color: var(--op-signal); }
+.entry .src { margin-top: 8px; font: 400 12px/18px var(--op-mono); color: var(--op-gray); }
+.about .foot a { color: inherit; text-decoration: none; } .about .foot a:hover { color: var(--op-paper); }
+
 </style>
 </head>
 <body>
@@ -118,7 +126,7 @@ a { color: inherit; } button { font: inherit; color: inherit; }
       <h1 id="f-title">Introducing wc3env</h1>
       <p class="sub">Warcraft III as an environment and benchmark.</p>
       <p class="by">Peter Wang and Nico Christie</p>
-      <p class="actions"><a class="btn" href="https://pwang724.github.io/wc3env/">Read the field notes</a><a class="link" href="https://github.com/pwang724/wc3env">Code on GitHub</a></p>
+      <p class="actions"><a class="btn" href="https://pwang724.github.io/wc3env/" target="_blank" rel="noopener noreferrer">Read the field notes</a><a class="link" href="https://github.com/pwang724/wc3env" target="_blank" rel="noopener noreferrer">Code on GitHub</a></p>
     </div>
     <figure class="f-art">
       <canvas id="featureDots" role="img" aria-label="Illustrative map of one game: our base at lower left, a cleared creep camp in the middle, the enemy base and towers at upper right. Dashed gray lines show the plan; one red path shows the army walking into the enemy towers."></canvas>
@@ -126,7 +134,7 @@ a { color: inherit; } button { font: inherit; color: inherit; }
   </section>
 
   <section id="research" class="wrap" aria-labelledby="r-title">
-    <div class="sec-head"><h2 id="r-title">Research</h2><p class="label">Pick a project. The dots redraw it.</p></div>
+    <div class="sec-head"><h2 id="r-title">Research</h2><p class="label">Everything here is Peter Wang and Nico Christie. Pick one; the dots redraw it.</p></div>
     <div class="explorer" id="explorer">
       <div class="index" id="index" aria-label="Projects"></div>
       <div class="panel"><div class="pin" id="pin"></div></div>
@@ -145,7 +153,7 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     <span class="wordmark" aria-hidden="true"><span class="wm">off policy, inc</span><span class="dot"></span></span>
     <h2>A different path.</h2>
     <p class="pos">off policy is an independent AI laboratory following interesting questions wherever they lead. We say what was tried and what was learned. Research in public.</p>
-    <div class="foot"><span>Independent AI laboratory</span><span>Day 61 of 183</span></div>
+    <div class="foot"><span>Independent AI laboratory</span><span><a href="https://x.com/BrainsAndTennis" target="_blank" rel="noopener noreferrer">@BrainsAndTennis</a> · <a href="https://x.com/nicochristie" target="_blank" rel="noopener noreferrer">@nicochristie</a></span></div>
   </div>
 </footer>
 <script>
@@ -1212,34 +1220,13 @@ a { color: inherit; } button { font: inherit; color: inherit; }
      95% monochrome. Ink and paper; gray for the plan; red selects; yellow marks the endpoint.
      All content comes from FEATURED and PROJECTS below. */
 
-  var TYPES = [
-    { id: 'rl', name: 'RL', svg: '<circle cx="8" cy="8" r="6" fill="currentColor"/>' },
-    { id: 'training', name: 'Training', svg: '<rect x="2" y="2" width="12" height="12" fill="currentColor"/>' },
-    { id: 'neuro', name: 'Neuro', svg: '<path d="M8 2 14.5 14h-13z" fill="currentColor"/>' },
-    { id: 'wet', name: 'Wet lab', svg: '<circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2"/>' },
-    { id: 'hardware', name: 'Hardware', svg: '<path d="M3 3 13 13M13 3 3 13" stroke="currentColor" stroke-width="2.2" fill="none"/>' },
-    { id: 'notes', name: 'Notes', svg: '<path d="M2 12a6 6 0 0 1 12 0z" fill="currentColor"/>' }
-  ];
-
-  var FEATURED = {
-    id: 'wc3env', type: 'rl', day: 61, art: 'wc3', seed: 3,
-    title: 'Warcraft III as an environment and benchmark',
-    authors: 'Peter Wang and Nico Christie', date: '25 September 2026',
-    url: 'https://pwang724.github.io/wc3env/', code: 'https://github.com/pwang724/wc3env',
-    summary: 'wc3env hooks the real game so an agent can step it like MuJoCo, fog of war included. Then Opus 5.5 played full games. It lost.',
-    body: [
-      'Blizzard never open-sourced the engine, so wc3env works on the real game. A small DLL detours about 90 of its functions to freeze and advance the clock, read every unit, and issue orders the way a player’s clicks would. Python talks to it over a local pipe.',
-      'Jev, a zero-shot classifier, won every duel we ran against the built-in AI. In full games, Opus 5.5 ran the economy and handed fights to Jev. It lost to the Insane AI at about $5 a game.',
-      'Two things broke it: decisions need under a second of latency with 10 to 20 prior frames, and decision quality fell off past about ten turns of context. Next: reinforcement learning, self-play, and a proper benchmark.'
-    ]
-  };
-  // Placeholder projects. Replace with real ones: title, type, day (1..183), art (any archive key), seed.
-  var ART_BY_TYPE = { rl: ['policy-drift', 'gridworld', 'attractor', 'off-the-chart'], training: ['runs', 'sweep', 'skip-connection', 'traces'], neuro: ['iris', 'arbor', 'column', 'gyri', 'cochlea', 'loud-unit', 'witnesses'], wet: ['drosophila', 'mutants', 'rosette', 'plume', 'ommatidia'], hardware: ['instrument', 'stack', 'transit'], notes: ['arbor-hill', 'decks', 'witnesses'] };
-  var TODAY = 61, PROJECTS = (function () { var R = rng(183), out = [FEATURED], n = 25; for (var i = 0; i < n; i++) { var t = TYPES[(i * 5 + 1 + (R() * 2 | 0)) % TYPES.length], arts = ART_BY_TYPE[t.id]; out.push({ id: 'p' + (i + 2), title: 'Project ' + (i + 2 < 10 ? '0' : '') + (i + 2), type: t.id, day: Math.max(1, Math.round(TODAY - 2 - i * ((TODAY - 2) / n) - R() * 2)), art: arts[(R() * arts.length) | 0], seed: (R() * 1e6) | 0 }); } return out; })();
   function typeOf(id) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i].id === id) return TYPES[i]; return TYPES[0]; }
   function icon(t, s) { return '<svg viewBox="0 0 16 16" width="' + (s || 12) + '" height="' + (s || 12) + '" aria-hidden="true">' + typeOf(t).svg + '</svg>'; }
-  function barsHTML(R, n) { var h = '<div class="bars" aria-hidden="true">'; for (var l = 0; l < n; l++) h += '<span style="width:' + (l === n - 1 ? 30 + R() * 40 : 84 + R() * 16 | 0) + '%"></span>'; return h + '</div>'; }
   function esc(s) { var e = document.createElement('span'); e.textContent = s; return e.innerHTML; }
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function fmtDate(d, short) { var p = d.split('-'); return +p[2] + ' ' + (short ? MONTHS[+p[1] - 1].slice(0, 3) : MONTHS[+p[1] - 1]); }
+  function ext(href, label, cls) { return '<a class="' + (cls || 'link') + '" href="' + href + '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>'; }
+  function quoteHTML(q) { return '<blockquote class="q">' + q.text.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '<footer>' + (q.url ? ext(q.url, q.by, 'who') : '<span class="who">' + esc(q.by) + '</span>') + (q.where ? ' \u00b7 ' + esc(q.where) : ' on X') + '</footer></blockquote>'; }
 
   /* ---------- compositions, drawn in the art palette then sampled into dots.
      ink = ink, blue = the plan (renders gray), orange = what happened (renders red) ---------- */
@@ -1355,33 +1342,31 @@ a { color: inherit; } button { font: inherit; color: inherit; }
   }
 
   function startSite() {
-    REG.wc3 = { id: 'wc3', size: 'wide', draw: drawWc3 };
-    PROJECTS = PROJECTS.filter(function (p) { return REG[p.art]; });
     var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    PROJECTS.forEach(function (p) { REG[p.id] = { id: p.id, size: 'wide', draw: p.art }; });
 
     /* ---- featured ---- */
     var feat = DotField(document.getElementById('featureDots'), { grid: 2.6, max: 80000 });
-    feat.show(function (c, W, H) { return drawWc3(c, W, H, rng(FEATURED.seed)); });
+    feat.show(function (c, W, H) { return FEATURED.art(c, W, H, rng(3)); });
 
     /* ---- research explorer ---- */
     var ex = document.getElementById('explorer'), index = document.getElementById('index'), pin = document.getElementById('pin'), active = -1;
-    var field = DotField(document.getElementById('dots'), { grid: 3.4 });
+    var field = DotField(document.getElementById('dots'), { grid: 3.2 });
     function idle() { field.show(function (c, W, H) { return drawTrace(c, W, H); }); }
     TYPES.forEach(function (t) {
       var mine = PROJECTS.filter(function (p) { return p.type === t.id; }); if (!mine.length) return;
       var h = document.createElement('h3'); h.innerHTML = icon(t.id, 10) + ' ' + t.name; index.appendChild(h);
-      mine.forEach(function (p) { var b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', 'false'); b.dataset.i = PROJECTS.indexOf(p); b.innerHTML = '<span class="t"></span><span class="d">' + p.day + '</span>'; b.firstChild.textContent = p.title; b.onclick = function () { var i = +b.dataset.i; select(active === i ? -1 : i); }; index.appendChild(b); });
+      mine.forEach(function (p) { var b = document.createElement('button'); b.type = 'button'; b.className = 'row'; b.setAttribute('aria-pressed', 'false'); b.dataset.i = PROJECTS.indexOf(p); b.innerHTML = '<span class="t"></span><span class="d">' + fmtDate(p.date, true) + '</span>'; b.firstChild.textContent = p.title; b.onclick = function () { var i = +b.dataset.i; select(active === i ? -1 : i); }; index.appendChild(b); });
     });
     function fillPanel(i) {
-      var p = PROJECTS[i], R = rng(p.seed), h = '<p class="label">' + icon(p.type) + ' ' + typeOf(p.type).name + ' · day ' + p.day + ' of 183</p><h3>' + esc(p.title) + '</h3>';
-      if (p.body) { h += '<p class="by">' + esc(p.authors) + '</p>' + p.body.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '<p class="actions"><a class="btn" href="' + p.url + '">Read the field notes</a><a class="link" href="' + p.code + '">Code on GitHub</a></p>'; }
-      else h += barsHTML(R, 5) + barsHTML(R, 6) + barsHTML(R, 3) + '<p class="actions"><a class="link" href="#' + p.id + '">In the log</a></p>';
-      pin.innerHTML = h; pin.scrollTop = 0;
+      var p = PROJECTS[i];
+      pin.innerHTML = '<p class="label">' + icon(p.type) + ' ' + typeOf(p.type).name + ' · ' + fmtDate(p.date) + ' 2026' + (p.views ? ' · ' + p.views + ' views' : '') + '</p><h3>' + esc(p.title) + '</h3>' + p.quotes.map(quoteHTML).join('') + '<p class="actions">' + p.links.map(function (l, k) { return ext(l[1], l[0], k ? 'link' : 'btn'); }).join('') + '</p>';
+      pin.scrollTop = 0;
     }
     function select(i) {
       index.querySelectorAll('.row').forEach(function (r) { r.setAttribute('aria-pressed', +r.dataset.i === i ? 'true' : 'false'); });
       var wasOpen = ex.classList.contains('open'); active = i; ex.classList.toggle('open', i >= 0); if (i >= 0) fillPanel(i);
-      var show = function () { if (i < 0) idle(); else { var p = PROJECTS[i]; field.show(function (c, W, H) { c.fillStyle = C.paper; c.fillRect(0, 0, W, H); if (p.art === 'wc3') return drawWc3(c, W, H, rng(p.seed)); artInto(c, rng(p.seed), p.art, 0, 0, W, H); }, p.art !== 'wc3'); } };
+      var show = function () { if (i < 0) idle(); else { var p = PROJECTS[i]; field.show(function (c, W, H) { return p.art(c, W, H, rng(7)); }); } };
       if (wasOpen !== (i >= 0) && !still && window.matchMedia('(min-width: 901px)').matches) { var done = false, once = function (e) { if (done || (e && e.target !== ex)) return; done = true; ex.removeEventListener('transitionend', once); field.size(); show(); }; ex.addEventListener('transitionend', once); setTimeout(once, 700); } else show();
     }
     idle();
@@ -1390,17 +1375,168 @@ a { color: inherit; } button { font: inherit; color: inherit; }
     var feed = document.getElementById('feed'), chips = document.getElementById('chips'), count = document.getElementById('count'), filter = null;
     function chip(label, id, html) { var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.setAttribute('aria-pressed', id === null ? 'true' : 'false'); b.innerHTML = html + label; b.onclick = function () { filter = id; chips.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); }); apply(); }; chips.appendChild(b); }
     chip('All', null, ''); TYPES.forEach(function (t) { if (PROJECTS.some(function (p) { return p.type === t.id; })) chip(t.name, t.id, icon(t.id, 11)); });
-    PROJECTS.slice().sort(function (a, b) { return b.day - a.day; }).forEach(function (p) {
-      var i = PROJECTS.indexOf(p), el = document.createElement('article'); el.className = 'entry'; el.id = p.id; el.dataset.type = p.type; var R = rng(p.seed + 5);
-      el.innerHTML = '<span class="day">Day ' + p.day + '</span><div class="body"><h3><button type="button"></button></h3>' + (p.summary ? '<p>' + esc(p.summary) + '</p>' : barsHTML(R, 2)) + '</div><span class="tag">' + icon(p.type) + ' ' + typeOf(p.type).name + '</span>';
+    PROJECTS.forEach(function (p, i) {
+      var q = p.quotes[0], el = document.createElement('article'); el.className = 'entry'; el.id = p.id; el.dataset.type = p.type;
+      el.innerHTML = '<span class="day">' + fmtDate(p.date, true) + '</span><div class="body"><h3><button type="button"></button></h3><p>' + esc(q.text.length > 1 ? q.text[1] : q.text[0]) + '</p><p class="src">' + (q.url ? ext(q.url, q.by + (p.views ? ' · ' + p.views + ' views' : ''), 'who') : esc(q.by)) + '</p></div><span class="tag">' + icon(p.type) + ' ' + typeOf(p.type).name + '</span>';
       var bt = el.querySelector('h3 button'); bt.textContent = p.title; bt.onclick = function () { open(i); }; feed.appendChild(el);
     });
     function open(i) { document.getElementById('research').scrollIntoView({ behavior: still ? 'auto' : 'smooth' }); if (active !== i) select(i); }
-    function apply() { var n = 0; feed.querySelectorAll('.entry').forEach(function (e) { var show = !filter || e.dataset.type === filter; e.hidden = !show; if (show) n++; }); count.textContent = n + (n === 1 ? ' entry' : ' entries'); }
+    function apply() { var n = 0; feed.querySelectorAll('.entry').forEach(function (e) { var show = !filter || e.dataset.type === filter; e.hidden = !show; if (show) n++; }); count.textContent = n + (n === 1 ? ' project' : ' projects'); }
     apply();
-    document.querySelectorAll('[data-open-featured]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); open(0); }); });
+    document.querySelectorAll('a[href^="http"]').forEach(function (a) { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
     if (location.hash) { var k = PROJECTS.map(function (p) { return '#' + p.id; }).indexOf(location.hash); if (k >= 0) select(k); }
   }
+
+  /* ================= the work: real projects, exact words from X, and one dot artwork each =================
+     Art palette (sampled into dots): C.ink -> ink, C.blue -> gray (the plan / context), C.orange -> red (what happened). */
+
+  function stage(ctx, W, H, aspect) {
+    ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+    aspect = aspect || 1.3;
+    var bw = Math.min(W, H * aspect) * 0.94, bh = bw / aspect, ox = (W - bw) / 2, oy = (H - bh) / 2, u = bw / 100;
+    var S = {
+      u: u, P: function (x, y) { return [ox + x * bw, oy + y * bh]; },
+      disk: function (x, y, r, col, a) { var p = S.P(x, y); ctx.globalAlpha = a || 1; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r * u, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; },
+      ring: function (x, y, r, col, w, dash) { var p = S.P(x, y); ctx.strokeStyle = col; ctx.lineWidth = w * u; ctx.setLineDash(dash ? dash.map(function (v) { return v * u; }) : []); ctx.beginPath(); ctx.arc(p[0], p[1], r * u, 0, TAU); ctx.stroke(); ctx.setLineDash([]); },
+      rect: function (x, y, w, h, col, a) { var p = S.P(x, y), q = S.P(x + w, y + h); ctx.globalAlpha = a || 1; ctx.fillStyle = col; ctx.fillRect(p[0], p[1], q[0] - p[0], q[1] - p[1]); ctx.globalAlpha = 1; },
+      box: function (x, y, s, col) { var p = S.P(x, y), h = s * u / 2; ctx.fillStyle = col; ctx.fillRect(p[0] - h, p[1] - h, h * 2, h * 2); },
+      line: function (pts, col, w, dash, a) { ctx.globalAlpha = a || 1; ctx.strokeStyle = col; ctx.lineWidth = w * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.setLineDash(dash ? dash.map(function (v) { return v * u; }) : []); ctx.beginPath(); pts.forEach(function (q, k) { var p = S.P(q[0], q[1]); if (k) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; },
+      curve: function (a, b, c, d) { var out = []; for (var t = 0; t <= 1.0001; t += 0.02) { var v = 1 - t; out.push([v * v * v * a[0] + 3 * v * v * t * b[0] + 3 * v * t * t * c[0] + t * t * t * d[0], v * v * v * a[1] + 3 * v * v * t * b[1] + 3 * v * t * t * c[1] + t * t * t * d[1]]); } return out; }
+    };
+    return S;
+  }
+
+  // I turned the fly bisexual: 8 P1 neurons, male and female cues, before and after mAL blockade (ranges as reported)
+  function drawBi(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(1015), i, k;
+    function raster(x0, y0, w, rows, counts, col) {
+      for (i = 0; i < rows; i++) {
+        var y = y0 + i * 0.047; S.line([[x0, y], [x0 + w, y]], C.blue, 0.25, null, 0.5);
+        var n = counts(i); for (k = 0; k < n; k++) { var x = x0 + 0.02 + R() * (w - 0.04); S.line([[x, y - 0.016], [x, y + 0.016]], col, 1.1); }
+      }
+    }
+    // male cue: control silent, mAL blocked 1-5 spikes (the finding, in red)
+    raster(0.04, 0.09, 0.42, 8, function () { return 0; }, C.ink);
+    raster(0.54, 0.09, 0.42, 8, function () { return 1 + (R() * 5 | 0); }, C.orange);
+    // female cue: 8-11 spikes, then 18-20 after blockade
+    raster(0.04, 0.6, 0.42, 8, function () { return 8 + (R() * 4 | 0); }, C.ink);
+    raster(0.54, 0.6, 0.42, 8, function () { return 18 + (R() * 3 | 0); }, C.ink);
+    // the cut: mAL output blocked between the two columns
+    S.line([[0.5, 0.05], [0.5, 0.95]], C.ink, 0.9, [1.6, 1.6]);
+    S.box(0.5, 0.5, 3.2, C.orange);
+  }
+
+  // fast-weight path integration: a fly wanders from a drop of food in the dark and heads straight back
+  function drawPath(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(4), i, home = [0.14, 0.86], far = [0.66, 0.5], walk = [];
+    for (i = 0; i <= 260; i++) { var t = i / 260, e = t * t * (3 - 2 * t), r = 0.035 + 0.06 * Math.sin(Math.PI * t), ph = t * Math.PI * 11 + (R() - 0.5) * 0.25;
+      var v = 1 - e, bx = v * v * v * home[0] + 3 * v * v * e * 0.02 + 3 * v * e * e * 0.5 + e * e * e * far[0], by = v * v * v * home[1] + 3 * v * v * e * 0.12 + 3 * v * e * e * 0.0 + e * e * e * far[1]; walk.push([bx + r * 0.7 * Math.cos(ph), by + r * 0.9 * Math.sin(ph)]); }
+    var end = walk[walk.length - 1];
+    for (i = 0; i < 26; i++) { var q = [R() * 0.7, R()]; S.line([home, q], C.ink, 0.25, null, 0.16); } // the dark: faint sight lines to nothing
+    S.line(walk, C.blue, 1.5, [2.4, 1.8]);
+    S.line([end, home], C.orange, 2.6); // the home vector, straight back to the food
+    S.disk(end[0], end[1], 2, C.ink);
+    // the heading bump on a ring of 16 wedges (the hΔ circuit keeps it)
+    var cx = 0.84, cy = 0.3; for (i = 0; i < 16; i++) { var t = i / 16 * TAU, bump = Math.exp(-Math.pow(((i - 3 + 16) % 16) - 0, 2) / 2.2) + Math.exp(-Math.pow(((i - 3 + 16) % 16) - 16, 2) / 2.2); S.disk(cx + Math.cos(t) * 0.1, cy + Math.sin(t) * 0.13, 1 + bump * 2.4, bump > 0.3 ? C.ink : C.blue); }
+    S.ring(cx, cy, 5, C.blue, 0.6, [1, 1.4]);
+    return S.P(home[0], home[1]);
+  }
+
+  // system1 (multi-agent Jevs) + system2 (astra): one general, seven platoon leaders, focus fire
+  function drawHarness(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(7), i, k, gen = [0.2, 0.18], plats = [], enemy = [], target = [0.8, 0.46];
+    for (i = 0; i < 7; i++) plats.push([0.08 + i * 0.07, 0.52 + Math.sin(i * 0.9) * 0.08]);
+    for (i = 0; i < 14; i++) enemy.push([0.74 + (i % 4) * 0.055 + R() * 0.02, 0.3 + (i / 4 | 0) * 0.1 + R() * 0.03]);
+    plats.forEach(function (p) { S.line([gen, p], C.ink, 0.35, null, 0.35); enemy.forEach(function (e) { if (R() < 0.3) S.line([p, e], C.ink, 0.25, null, 0.2); }); });
+    S.disk(gen[0], gen[1], 4.6, C.ink); S.ring(gen[0], gen[1], 6.6, C.blue, 0.9, [1.2, 1.2]);
+    plats.forEach(function (p, j) { S.ring(p[0], p[1], 2.8, C.blue, 1.1); for (k = 0; k < 5; k++) S.disk(p[0] + (R() - 0.5) * 0.06, p[1] + 0.07 + R() * 0.07, 0.9, C.ink); });
+    enemy.forEach(function (e) { S.disk(e[0], e[1], 1.5, C.blue); });
+    [1, 3, 4, 6].forEach(function (j) { var p = plats[j]; S.line(S.curve(p, [p[0] + 0.15, p[1] - 0.1], [target[0] - 0.2, target[1] + 0.1], target), C.orange, 1.3); });
+    S.disk(target[0], target[1], 2.6, C.ink);
+    return S.P(target[0], target[1] - 0.04);
+  }
+
+  // Jev in GTA 5: a city grid, the getaway route, the police behind
+  function drawGTA(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(5), i, j, bx = 0.1, by = 0.12;
+    for (i = 0; i < 6; i++) for (j = 0; j < 4; j++) S.rect(0.04 + i * 0.16, 0.06 + j * 0.23, 0.12, 0.18, C.blue, R() < 0.25 ? 0.5 : 0.22);
+    var route = [[0.02, 0.96], [0.02, 0.73], [0.34, 0.73], [0.34, 0.5], [0.66, 0.5], [0.66, 0.27], [0.82, 0.27], [0.82, 0.04], [0.99, 0.04]];
+    S.line(route, C.orange, 2.2);
+    [[0.18, 0.73], [0.34, 0.62], [0.5, 0.5]].forEach(function (c, k) { S.box(c[0], c[1], 2.6, C.ink); S.line([[c[0] - 0.03, c[1]], [c[0] - 0.08, c[1]]], C.ink, 0.5, [0.6, 0.8]); });
+    S.ring(0.34, 0.62, 6, C.ink, 0.8, [0.8, 1.2]); for (i = 0; i < 12; i++) { var t = i / 12 * TAU; S.line([[0.34 + Math.cos(t) * 0.05, 0.62 + Math.sin(t) * 0.065], [0.34 + Math.cos(t) * 0.08, 0.62 + Math.sin(t) * 0.1]], C.ink, 0.6); }
+    for (i = 0; i < 30; i++) { var a = [R(), R()]; S.disk(a[0], a[1], 0.5, C.ink, 0.6); }
+    return S.P(0.99, 0.04);
+  }
+
+  // ScrapeMyProfessor: every rating scraped into one ranking, one of them yours
+  function drawRank(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(12), i, n = 18, pick = 5;
+    for (i = 0; i < 700; i++) S.disk(0.02 + R() * 0.28, 0.06 + R() * 0.88, 0.45, C.ink, 0.25 + R() * 0.5);
+    for (i = 0; i < n; i++) { var y = 0.07 + i * 0.049, w = 0.6 * Math.pow(0.93, i) * (0.92 + R() * 0.08); S.line([[0.36, y], [0.36 + w, y]], i === pick ? C.orange : (i < 3 ? C.ink : C.blue), 1.7); if (i === pick) S.line([[0.3, y], [0.35, y]], C.ink, 0.4, [0.6, 0.8]); }
+    return S.P(0.36 + 0.6 * Math.pow(0.93, pick) * 0.96, 0.07 + pick * 0.049);
+  }
+
+  // Xbench: 23k posts from 14k people; 29 users moved one way, 9 the other
+  function drawXbench(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(23), i, A = [0.26, 0.55], B = [0.76, 0.5];
+    for (i = 0; i < 900; i++) S.disk(R(), R(), 0.4, C.blue, 0.2 + R() * 0.35);
+    function mass(c, r, col, n) { for (var k = 0; k < n; k++) { var t = R() * TAU, d = Math.sqrt(R()) * r; S.disk(c[0] + Math.cos(t) * d * 0.77, c[1] + Math.sin(t) * d, 0.9, col); } }
+    mass(A, 0.2, C.blue, 260); mass(B, 0.22, C.ink, 320);
+    for (i = 0; i < 29; i++) { var a = [A[0] + (R() - 0.5) * 0.12, A[1] + (R() - 0.5) * 0.2], b = [B[0] + (R() - 0.5) * 0.12, B[1] + (R() - 0.5) * 0.2]; S.line(S.curve(a, [a[0] + 0.12, a[1] - 0.3 - R() * 0.1], [b[0] - 0.12, b[1] - 0.3 - R() * 0.1], b), C.orange, 0.5); }
+    for (i = 0; i < 9; i++) { var c = [B[0] + (R() - 0.5) * 0.12, B[1] + (R() - 0.5) * 0.2], e = [A[0] + (R() - 0.5) * 0.12, A[1] + (R() - 0.5) * 0.2]; S.line(S.curve(c, [c[0] - 0.12, c[1] + 0.3], [e[0] + 0.12, e[1] + 0.3], e), C.ink, 0.45, null, 0.6); }
+  }
+
+  // Opus 5 mini games: a shelf of one-prompt games, and paper pilot's flight through them
+  function drawGames(ctx, W, H) {
+    var S = stage(ctx, W, H, 1.3), R = rng(25), i, j;
+    for (i = 0; i < 4; i++) for (j = 0; j < 3; j++) { var x = 0.06 + i * 0.235, y = 0.08 + j * 0.3; S.line([[x, y], [x + 0.19, y], [x + 0.19, y + 0.24], [x, y + 0.24], [x, y]], C.blue, 0.8); }
+    for (i = 0; i < 40; i++) S.disk(0.1 + R() * 0.12, 0.42 + R() * 0.16, 0.9, C.ink); // the zombie horde
+    for (i = 0; i < 7; i++) for (j = 0; j < 5; j++) if ((i + j) % 2) S.rect(0.77 + i * 0.022, 0.72 + j * 0.03, 0.02, 0.028, C.ink, 0.8); // a mini civ
+    var fl = []; for (i = 0; i <= 80; i++) { var t = i / 80; fl.push([0.08 + t * 0.86, 0.3 + Math.sin(t * 9) * 0.12 * (1 - t) - t * 0.18]); }
+    S.line(fl, C.orange, 1.8);
+    var e = fl[fl.length - 1], p = S.P(e[0], e[1]), u = S.u; ctx.fillStyle = C.ink; ctx.beginPath(); ctx.moveTo(p[0] + 3 * u, p[1]); ctx.lineTo(p[0] - 2 * u, p[1] - 2 * u); ctx.lineTo(p[0] - 1 * u, p[1]); ctx.lineTo(p[0] - 2 * u, p[1] + 2 * u); ctx.closePath(); ctx.fill();
+  }
+
+  var TYPES = [
+    { id: 'agents', name: 'Agents', svg: '<circle cx="8" cy="8" r="6" fill="currentColor"/>' },
+    { id: 'neuro', name: 'Neuro', svg: '<path d="M8 2 14.5 14h-13z" fill="currentColor"/>' },
+    { id: 'evals', name: 'Evals', svg: '<rect x="2" y="2" width="12" height="12" fill="currentColor"/>' },
+    { id: 'data', name: 'Data', svg: '<circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="2"/>' },
+    { id: 'games', name: 'Games', svg: '<path d="M2 12a6 6 0 0 1 12 0z" fill="currentColor"/>' }
+  ];
+  var PETER = '@BrainsAndTennis', NICO = '@nicochristie';
+
+  // Newest first. Quotes are exact words from X; links open in a new tab.
+  var PROJECTS = [
+    { id: 'wc3env', type: 'agents', date: '2026-09-25', art: drawWc3, title: 'Warcraft III as an environment and benchmark',
+      quotes: [{ by: 'Peter Wang and Nico Christie', where: 'field notes', text: ['wc3env turns the real Warcraft III into a gym-style environment, and an LLM agent plays full games on it.'] }],
+      links: [['Read the field notes', 'https://pwang724.github.io/wc3env/'], ['Code on GitHub', 'https://github.com/pwang724/wc3env']] },
+    { id: 'gta', type: 'agents', date: '2026-09-24', art: drawGTA, title: 'Jev in GTA 5', views: '14K',
+      quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2103186608014991459', text: ['Jev driving cars and shooting cops with rocket launchers in GTA 5', 'It could reliably drive 30 miles/hour and escape 2 star wanted levels in the city', 'We probably aren’t taking system1 model impacts on self driving seriously enough', 'Another fun one with @BrainsAndTennis'] }],
+      links: [['On X', 'https://x.com/nicochristie/status/2103186608014991459']] },
+    { id: 'harness', type: 'agents', date: '2026-09-18', art: drawHarness, title: 'system1 + system2 in Warcraft III', views: '185K',
+      quotes: [{ by: PETER, url: 'https://x.com/BrainsAndTennis/status/2100998807903482364', text: ['A composite agent harness composed of system1 (multi-agent jevs) + system2 (astra) out-micros an insane computer in my WC3FT RL env (will open-source soon)'] }],
+      links: [['On X', 'https://x.com/BrainsAndTennis/status/2100998807903482364']] },
+    { id: 'fastweights', type: 'neuro', date: '2026-09-14', art: drawPath, title: 'Fast-weight continual learning in a fly', views: '633K',
+      quotes: [{ by: PETER, url: 'https://x.com/BrainsAndTennis/status/2099561733056794645', text: ['I and @nicochristie ran the fly connectome and found the group of neurons (hΔH, hΔA, hΔI and hΔG) that could allow the fly to navigate using fast synaptic weight updates, not neural activations. This is fast-weight continual learning in a fly, something current LLMs don\'t do!'] },
+               { by: NICO, url: 'https://x.com/nicochristie/status/2099562328849338402', text: ['What started off as trying to turn the fly gay might have led to the first meaningful scientific finding from the connectome release'] }],
+      links: [['Peter on X', 'https://x.com/BrainsAndTennis/status/2099561733056794645'], ['Nico on X', 'https://x.com/nicochristie/status/2099562328849338402']] },
+    { id: 'scrapemyprofessor', type: 'data', date: '2026-09-12', art: drawRank, title: 'ScrapeMyProfessor',
+      quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2098808510679322988', text: ['Another fun collaboration with the man @BrainsAndTennis. Expect more weird quests!', 'All of the data we collected is destroyed :)', 'See where your university and teacher crushes rank'] }],
+      links: [['See the rankings', 'https://nicodunks.github.io/ScrapeMyProfessor-site/'], ['On X', 'https://x.com/nicochristie/status/2098808510679322988']] },
+    { id: 'bisexual-fly', type: 'neuro', date: '2026-09-10', art: drawBi, title: 'I turned the fly bisexual', views: '3.2M',
+      quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2098106823970828606', text: ['I turned the fly bisexual', 'Inspired by Kallman et al (\'15), I blocked mAL output in a 166,606-neuron fly model and measured responses in 8 candidate P1 male courtship neurons.', 'In 3 experiments, when cued by other males, baseline P1 spikes rose from 0 to 1–5 after mAL blockade'] },
+               { by: PETER, url: 'https://x.com/BrainsAndTennis/status/2098126002526544023', text: ['nico abliterated the fly brain to make it bi'] }],
+      links: [['Nico on X', 'https://x.com/nicochristie/status/2098106823970828606'], ['Peter’s explainer', 'https://x.com/BrainsAndTennis/status/2098126002526544023']] },
+    { id: 'xbench', type: 'evals', date: '2026-09-05', art: drawXbench, title: 'Xbench: Twitter as an AI Eval', views: '30K',
+      quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2096258042199507243', text: ['Xbench: Twitter as an AI Eval', 'It\'s been painfully clear over the last few days that the industry has an evals problem.', 'We joke that x is the real eval, but what if we took that seriously? What if attention is all you need for evals too?'] },
+               { by: NICO, url: 'https://x.com/nicochristie/status/2096258044195926356', text: ['I sampled 23k posts from 14k people over 7 days.'] }],
+      links: [['Try Xbench', 'https://nicodunks.github.io/xbench/'], ['On X', 'https://x.com/nicochristie/status/2096258042199507243']] },
+    { id: 'minigames', type: 'games', date: '2026-07-25', art: drawGames, title: 'Opus 5 mini games in one prompt', views: '11K',
+      quotes: [{ by: NICO, url: 'https://x.com/nicochristie/status/2081143562474041469', text: ['Opus 5 can build awesome mini games in one prompt', 'I had early access and hacked together a site, kinda like an AI-Miniclip.', 'Here I played the zombie survival and a mini civ game. My fav is paper pilot.', 'Everyone can make 2 games for free + it\'s open source. Links below.'] }],
+      links: [['Play on gamecraft.gg', 'https://gamecraft.gg'], ['On X', 'https://x.com/nicochristie/status/2081143562474041469']] }
+  ];
+  var FEATURED = PROJECTS[0];
 
   whenFonts(function () { startSite(); });
 })();
