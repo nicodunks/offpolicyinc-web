@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A general and seven platoon leaders · off policy</title>
+<meta name="description" content="A composite agent harness composed of system1 (multi-agent jevs) + system2 (astra) out-micros an insane computer in my WC3FT RL env.">
+<meta property="og:title" content="A general and seven platoon leaders · off policy"><meta property="og:description" content="A composite agent harness composed of system1 (multi-agent jevs) + system2 (astra) out-micros an insane computer in my WC3FT RL env."><meta property="og:site_name" content="off policy">
+<meta name="theme-color" content="#FAFAF7">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect x=%274%27 y=%274%27 width=%2724%27 height=%2724%27 fill=%27%23E52228%27/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+
+</head>
+<body data-page="writeup" data-slug="harness">
+<header class="top wrap">
+  <a class="wordmark" href="/" aria-label="off policy, home"><span class="wm">off policy</span><span class="dot" aria-hidden="true"></span></a>
+  <nav aria-label="Site"><a href="/#work">Work</a><span aria-hidden="true">/</span><a href="/#x">From X</a><span aria-hidden="true">/</span><a href="/#about">About</a></nav>
+</header>
+<main>
+
+  <article>
+    <header class="w-head wrap">
+      <p class="kicker"><a href="/#ml">Machine learning</a> <span aria-hidden="true">/</span> <a href="/#games">Games</a><span>18 September 2026</span></p>
+      <h1>A general and seven platoon leaders</h1>
+      <p class="by">Peter Wang and Nico Christie</p>
+      <p class="actions"><a class="link" href="https://x.com/BrainsAndTennis/status/2100998807903482364" target="_blank" rel="noopener noreferrer">Watch the demo on X</a></p>
+    </header>
+    <figure class="w-art wrap" aria-hidden="true" style="margin:0 auto"><canvas id="artDots"></canvas></figure>
+    <div class="prose wrap">
+<section class="thread"><h2>In our words</h2><p class="big">A composite agent harness composed of system1 (multi-agent jevs) + system2 (astra) out-micros an insane computer in my WC3FT RL env (will open-source soon)</p><p class="src"><a href="https://x.com/BrainsAndTennis/status/2100998807903482364" target="_blank" rel="noopener noreferrer">@BrainsAndTennis on X</a> · 18 September 2026</p><p class="actions"><a class="btn" href="https://x.com/BrainsAndTennis/status/2100998807903482364" target="_blank" rel="noopener noreferrer">Watch the demo on X</a></p></section><section><h2>The strategy</h2><p>The general, astra, wrote one strategy for the whole fight. The platoon leaders followed it.</p><blockquote class="pull"><p>"Damage dealers: concentrate on the enemy Archmage, then exposed Priests, other casters and ranged units. Finish priority targets together; switch when the target dies, disappears, becomes unsafe or a higher-priority support becomes exposed. Avoid grinding down the Mountain King while vulnerable supports remain. Healing and survival roles take precedence over following the damage dealers' target."</p></blockquote><p class="src"><a href="https://x.com/BrainsAndTennis/status/2100999929829417120" target="_blank" rel="noopener noreferrer">@BrainsAndTennis on X</a> · 18 September 2026</p></section><section class="thread"><h2>How it ran</h2><p>In this demo, astra acted as a general and came up with a strategy. 7 Individual Jevs acted as platoon leaders that followed this strategy, separately controlling heroes and unit groups. The micro obviously ain’t at the level of @followgrubby (my gaming goat), but as you can see, it executed on a strategy and made intelligent micro'ing decisions.</p><p>1000+ calls, or ~100 calls per unit group per minute, were made over the course of 2 minutes, which would have been too slow and expensive for most if not all llm apis. For jev it was about 20 cents. Wish we had this when we were simulating agent civilizations in minecraft @feitong_yang @GuangyuRobert @nicochristie @A_J_Ahn @shuying_luo</p><p>This was the first and only video I recorded before my Jev tokens ran out. Pls give me more tokens to make full matches happen @CompleteSkeptic &lt;3</p><p>@nicochristie and i will be open sourcing a performant wc3 rl env, like sc2py, very soon. A love letter to a game that gave me so much magic and wonder when i was young</p><p class="src"><a href="https://x.com/BrainsAndTennis/status/2101000690692943884" target="_blank" rel="noopener noreferrer">@BrainsAndTennis on X</a> · 18 September 2026</p></section><section class="thread"><h2>What’s next</h2><p>thank u and totally agreed. this was just 1 day of context/env engineering, lots more to optimize. some on top of mind are better featurization of spatial locations to be relative, some level of "momentum" for decision-making so it doesn't change decisions every second, and possibly even an reflex layer below jev so it can respond instantaneously to stimuli, like AM to a casted storm bolt.</p><p>even then, unsure if it beats pros</p><p class="src"><a href="https://x.com/BrainsAndTennis/status/2101526367888359753" target="_blank" rel="noopener noreferrer">@BrainsAndTennis on X</a> · 20 September 2026</p><p>The environment is now open source. <a href="/work/wc3env/">Read how wc3env works, and what happened when Opus 5.5 and Jev played full games.</a></p></section>
+    </div>
+  </article>
+  <section class="more wrap" aria-labelledby="m-title">
+    <div class="sec-head"><h2 id="m-title">More work</h2></div>
+    <div class="themes" style="max-width:860px"><a class="w-row" href="/work/wc3env/" data-art="wc3env" data-themes="envs games"><span class="t">Warcraft III as an RL environment</span><span class="d">25 Sep</span><p class="dek">So Nico and I present wc3env, an open-source gym environment for Warcraft III: The Frozen Throne.</p><span class="who">Peter Wang and Nico Christie<span class="th">Environments &amp; evals · Games</span></span></a><a class="w-row" href="/work/fast-weights/" data-art="fast-weights" data-themes="neuro ml"><span class="t">Fast-weight continual learning in a fly</span><span class="d">14 Sep</span><p class="dek">A fly that leaves a drop of food and wanders in the dark can always find its way back.</p><span class="who">Peter Wang and Nico Christie<span class="th">Neuroscience · Machine learning</span></span></a><a class="w-row" href="/work/bisexual-fly/" data-art="bisexual-fly" data-themes="neuro"><span class="t">Turning the fly bisexual</span><span class="d">10 Sep</span><p class="dek">Inspired by Kallman et al (&#x27;15), I blocked mAL output in a 166,606-neuron fly model and measured responses in 8 candidate P1 male courtship neurons.</p><span class="who">Nico Christie and Peter Wang<span class="th">Neuroscience</span></span></a><a class="w-row" href="/work/xbench/" data-art="xbench" data-themes="envs ml"><span class="t">Xbench: Twitter Vibes as an AI Eval</span><span class="d">5 Sep</span><p class="dek">Today’s AI evals no longer reflect how frontier users feel about the models.</p><span class="who">Nico Christie and Peter Wang<span class="th">Environments &amp; evals · Machine learning</span></span></a></div>
+  </section>
+
+</main>
+<footer class="about" id="about">
+  <div class="wrap">
+    <span class="wordmark" aria-hidden="true"><span class="wm">off policy</span><span class="dot" aria-hidden="true"></span></span>
+    <h2>A different path.</h2>
+    <p class="pos">off policy is an independent AI laboratory following interesting questions wherever they lead. We say what was tried and what was learned. Research in public.</p>
+    <div class="foot"><span>Peter Wang and Nico Christie</span><span><a href="https://x.com/BrainsAndTennis" target="_blank" rel="noopener noreferrer">@BrainsAndTennis</a> · <a href="https://x.com/nicochristie" target="_blank" rel="noopener noreferrer">@nicochristie</a></span></div>
+  </div>
+</footer>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>

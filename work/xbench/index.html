@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xbench: Twitter Vibes as an AI Eval · off policy</title>
+<meta name="description" content="Today’s AI evals no longer reflect how frontier users feel about the models.">
+<meta property="og:title" content="Xbench: Twitter Vibes as an AI Eval · off policy"><meta property="og:description" content="Today’s AI evals no longer reflect how frontier users feel about the models."><meta property="og:site_name" content="off policy">
+<meta name="theme-color" content="#FAFAF7">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect x=%274%27 y=%274%27 width=%2724%27 height=%2724%27 fill=%27%23E52228%27/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+
+</head>
+<body data-page="writeup" data-slug="xbench">
+<header class="top wrap">
+  <a class="wordmark" href="/" aria-label="off policy, home"><span class="wm">off policy</span><span class="dot" aria-hidden="true"></span></a>
+  <nav aria-label="Site"><a href="/#work">Work</a><span aria-hidden="true">/</span><a href="/#x">From X</a><span aria-hidden="true">/</span><a href="/#about">About</a></nav>
+</header>
+<main>
+
+  <article>
+    <header class="w-head wrap">
+      <p class="kicker"><a href="/#envs">Environments &amp; evals</a> <span aria-hidden="true">/</span> <a href="/#ml">Machine learning</a><span>5 September 2026</span></p>
+      <h1>Xbench: Twitter Vibes as an AI Eval</h1>
+      <p class="by">Nico Christie and Peter Wang</p>
+      <p class="actions"><a class="link" href="https://nicodunks.github.io/xbench/" target="_blank" rel="noopener noreferrer">Open Xbench</a><a class="link" href="https://github.com/nicodunks/xbench" target="_blank" rel="noopener noreferrer">Code on GitHub</a><a class="link" href="https://x.com/nicochristie/status/2096284789766819924" target="_blank" rel="noopener noreferrer">Originally on X</a></p>
+    </header>
+    <figure class="w-art wrap" aria-hidden="true" style="margin:0 auto"><canvas id="artDots"></canvas></figure>
+    <div class="prose wrap">
+<div class="lede"><p>Today's AI evals no longer reflect how frontier users feel about the models.</p>
+<p>Revenue and adoption are probably the most valuable real world evals right now, but I believe that both are lagging indicators of a much fuzzier and more important measure that we call the twitter vibe, or “the mandate of heaven”.</p>
+<p>I attempt to measure this with Xbench.</p>
+<p>According to Xbench -- Codex is dominating Claude Code, Astra has the highest model sentiment, GLM 5.3 Flash tops model preferences, GPT 5.6 Sol over-engineers, and people really don't like Opus 5.</p>
+<p>People think Fable 5.1 is brilliant, but they are too mad at Anthropic to really admit it.</p>
+<p class="actions"><a class="btn" href="https://nicodunks.github.io/xbench/" target="_blank" rel="noopener noreferrer">Open Xbench</a></p></div>
+<h2>The Eval Problem</h2>
+<p>It’s clear to everyone on twitter that the AI industry has a serious eval problem. Gemini is accused of benchmaxxing, no eval measures how frustrating Opus 5 is to use, AA panics to update their evals, and GPT-6-Astra does not report on many of the go-to evals of yesterday.</p>
+<p>Update! AA just released an update, moving Astra up to the #2 spot. It is now sits equidistant between Fable 5.1 and Muse Spark 1.3... which...</p>
+<p>Astra launched and according to its model card, it is another Mythos preview moment. It solves ARC-AGI-3 and ExploitBench...</p>
+<p>Without going too deep here, you should assume self-reported evals to be very rigorous, a little skewed, and completely insufficient.</p>
+<p>That is why we need other, different ways to capture the obvious gap we all feel between a model card and what we experience every day as users on the frontier.</p>
+<p>I suggest we measure the twitter vibe, or the mandate of heaven.</p>
+<h2>Prior Examples of the Mandate of Heaven</h2>
+<p>We can tell when the vibe shifts. If you’re deep enough on twitter it’s visceral. We felt it late Summer 2024 with Sonnet 3.5 and Cursor for code, and in late Spring 2025 with Claude Code. It usually takes 6-12 months for impacts on adoption and ARR to land, while other companies sometime grow revenue and valuation faster.</p>
+<p>The trend continues now, but in OpenAI’s favor. About 6 months ago OpenAI recaptured the Mandate of Heaven with GPT 5.5-5.6 and Codex. Most of those in the know switched to Codex a while ago.</p>
+<p>Today, Twitter rallies against Claudish, unforced communication blunders, infra instability, what looks like tokenmaxxing, and more at Anthropic.</p>
+<p>Corporate America is still talking about Cowork, but by new year Codex will be all the rage. I predict OAI revenue will surpass Ant's by March '27 if things stay this way any longer (but what do i I know).</p>
+<h2>Xbench Experiment and Methodology</h2>
+<p>I built XBENCH to see if we could measure the Mandate of Heaven. It’s far from perfect – heavily limited by both my personal budget on x-api calls and the ceiling of whatever rigor one can really get to in a day and a half of building and writing – but I believe it reflects the truth on twitter.</p>
+<p>I polled all mentions of thirteen LLM models (details on which towards the bottom) and the top 5 coding agent harnesses. I sampled ~13% of them, which pulled 23,275 posts/replies/quotes from 14,454 twitter users over the last 7 days.</p>
+<p>I then had Fable 5.1 fan out dozens of Sonnet 5 subagents in parallel to analyze every single message, not relying on brittle key word matching or any pre-baked code, but actually reasoning over every single message. We logged all messages, but only counted messages that communicated a first hand user experience towards metrics.</p>
+<p>Claude filtered out anything vague, promotional messages, second hand reviews and stories, and bots. Qualifying messages were assigned a preference between positive, mixed, negative or not expressed. And every message that mentioned multiple models or harnesses was reasoned over to determine if there was a clear stated preference or even an explicit mention of switching usage from one model or harness to another.</p>
+<h2>Xbench Findings</h2>
+<p>Xbench's findings seemed to resonate strongly with today’s twitter vibes. See below for a bulleted list of call outs and judge for yourself.</p>
+<p>Codex is kicking butt rn.</p>
+<ul><li>GPT-6 Astra after one day has the highest sentiment of all 13 models (+64%, n 110) and the top model intelligence score (+76 on 71 posts).</li><li>Opus 5 is extremely disliked. It is the least preferred model of the 13, scores worst on personality (-65), and is the only model that scores net negative.</li><li>People prefer Codex to Claude Code 121:60 (67%) and people are clearly switching to Codex. 29 people switched to Codex while only 9 switched to Claude Code.</li><li>The biggest advantage Codex has over Claude code is on limits and quota, where Codex wins 41 to 13; Claude Code's limits sentiment is -64 against Codex's -31.</li><li>People really like Grok Bot. It wins head to head preference against Codex &amp; Claude 46:20.</li><li>Price is the biggest factor in winning on preferences for models (at least within the frontier). GLM 5.3 Flash sits at #1st place on preferences.</li><li>GPT 5.6 Sol beats Opus 5 in preference 25:14 (64%)</li><li>Fable 5.1 is admired for its intelligence, but complaints about token consumption and price hold it back towards the bottom of the preference ladder.</li><li>Fable 5.1 beats Opus 5 20:9 and beats Sol 17:10 in direct comparisons</li><li>What people dislike most about GPT 5.6 Sol is that it over-engineers and is hard to steer.</li><li>Filtering for English barely moves results, and what movement there is actually favors the Chinese OSS models</li></ul>
+<p>Below are findings that I believe are either a bit inaccurate or are probably explained away due to other biases and limitations</p>
+<ul><li>Fable 5.1 is the second worst preference score, and is lower than GLM 5.3 Flash on stated intelligence differences. Fable 5 and 5.1 are obviously smarter.</li><li>Codex's worst dimension is reliability at -52, and most of those posts are from the September 3 outage. Codex is generally very performant and reliable.</li><li>Kimi K3 remains suspiciously high on explicit preferences and sentiment. I suspect there is a SF vs non SF twitter divide here, some paying for influence, or maybe just too little sample size.</li><li>Grok Bot beats Claude Code 25:8 (76%) and Codex 21:12, taking 8 direct switchers from Claude Code and 5 from Codex.</li></ul>
+<h2>Issues and limitations</h2>
+<h3>1) Bad vibes towards Anthropic, and tailwinds for OSS</h3>
+<p>Another issue, to really overgeneralize and state it plainly, is that people on twitter are very upset with Anthropic right now and that carries over to how they publicly discuss their models and products.</p>
+<p>The opposite is true towards open source models. There is a secular trend towards open source, and all things relatively equal an open source or underdog model will peform much better on Xbench.</p>
+<h3>2) Twitter is owned by SpaceX and leans very pro-Elon.</h3>
+<p>There’s two trillion dollars of SpaceX stock making its weight felt on twitter. While I root for Elon, It’s hard to take Gavin Baker seriously when he’s on a book tour calling Grok Bot another “Claude Code moment”.</p>
+<p>I feel that the love for Grok 4.6 and Grok Build is mostly legitimate, but the Grok Bot heat feels possibly a bit manufactured.</p>
+<h2>Where this goes and how to improve things</h2>
+<ul><li>I only used ~$150 in x-api costs to pull data over the prior 7 days. $100-$200 a day + the last 30 days would be a far more robust signal. I would expect some directional change in my results, and way more meaningful confidence intervals. Evals aren't cheap though.</li><li>I should rank the intensity of sentiment and let that impact weighting.</li><li>Not all twitter signal is created equally – in fact, I will possibly explore making this SF only (sorry NYC). Unfortunately, twitter posts mostly do not contain location data. To do this, we must read against every author, and that is $0.01 a read. I would probably need to 100-200x my costs to make this robust and statistically significant using only SF.</li><li>I would like to include more models – Deepseek would be fun to include, and I would predict it would rank towards the top of Xbench if OpenCode is any signal.</li><li>I feel i got pretty deep in &lt;36 hours, but with a full week this would be far more rigorous.</li></ul>
+<h2>Models and harnesses compared</h2>
+<p>The thirteen models are Claude Fable 5.1, Claude Opus 5, GPT-6 Astra, GPT-5.6 Sol, GPT-5.6 Luna, Muse Spark 1.3, Muse Spark 1.2, Gemini 3.8 Flash, Gemini 3.7 Flash, Grok 4.6, GLM 5.3, GLM 5.3 Flash, and Kimi K3. The harnesses are Claude Code, Codex, and Grok Bot, with OpenCode and Pi collected but left off the page because their samples were too thin.</p>
+    </div>
+  </article>
+  <section class="more wrap" aria-labelledby="m-title">
+    <div class="sec-head"><h2 id="m-title">More work</h2></div>
+    <div class="themes" style="max-width:860px"><a class="w-row" href="/work/wc3env/" data-art="wc3env" data-themes="envs games"><span class="t">Warcraft III as an RL environment</span><span class="d">25 Sep</span><p class="dek">So Nico and I present wc3env, an open-source gym environment for Warcraft III: The Frozen Throne.</p><span class="who">Peter Wang and Nico Christie<span class="th">Environments &amp; evals · Games</span></span></a><a class="w-row" href="/work/harness/" data-art="harness" data-themes="ml games"><span class="t">A general and seven platoon leaders</span><span class="d">18 Sep</span><p class="dek">A composite agent harness composed of system1 (multi-agent jevs) + system2 (astra) out-micros an insane computer in my WC3FT RL env.</p><span class="who">Peter Wang and Nico Christie<span class="th">Machine learning · Games</span></span></a><a class="w-row" href="/work/fast-weights/" data-art="fast-weights" data-themes="neuro ml"><span class="t">Fast-weight continual learning in a fly</span><span class="d">14 Sep</span><p class="dek">A fly that leaves a drop of food and wanders in the dark can always find its way back.</p><span class="who">Peter Wang and Nico Christie<span class="th">Neuroscience · Machine learning</span></span></a><a class="w-row" href="/work/bisexual-fly/" data-art="bisexual-fly" data-themes="neuro"><span class="t">Turning the fly bisexual</span><span class="d">10 Sep</span><p class="dek">Inspired by Kallman et al (&#x27;15), I blocked mAL output in a 166,606-neuron fly model and measured responses in 8 candidate P1 male courtship neurons.</p><span class="who">Nico Christie and Peter Wang<span class="th">Neuroscience</span></span></a></div>
+  </section>
+
+</main>
+<footer class="about" id="about">
+  <div class="wrap">
+    <span class="wordmark" aria-hidden="true"><span class="wm">off policy</span><span class="dot" aria-hidden="true"></span></span>
+    <h2>A different path.</h2>
+    <p class="pos">off policy is an independent AI laboratory following interesting questions wherever they lead. We say what was tried and what was learned. Research in public.</p>
+    <div class="foot"><span>Peter Wang and Nico Christie</span><span><a href="https://x.com/BrainsAndTennis" target="_blank" rel="noopener noreferrer">@BrainsAndTennis</a> · <a href="https://x.com/nicochristie" target="_blank" rel="noopener noreferrer">@nicochristie</a></span></div>
+  </div>
+</footer>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>

@@ -318,8 +318,8 @@
   }
 
 
-  var THEMES = [{ id: 'neuro', art: drawPath }, { id: 'envs', art: drawXbench }, { id: 'games', art: drawHarness }, { id: 'learning', art: drawTrace }, { id: 'sports', art: drawTrace }];
-  var WRITING = [{ slug: 'wc3env', art: drawWc3 }, { slug: 'fast-weights', art: drawPath }, { slug: 'bisexual-fly', art: drawBi }];
+  var THEMES = [{ id: 'ml', art: drawTrace }, { id: 'neuro', art: drawPath }, { id: 'envs', art: drawXbench }, { id: 'games', art: drawHarness }, { id: 'sports', art: drawTrace }];
+  var WRITING = [{ slug: 'wc3env', art: drawWc3 }, { slug: 'harness', art: drawHarness }, { slug: 'fast-weights', art: drawPath }, { slug: 'bisexual-fly', art: drawBi }, { slug: 'xbench', art: drawXbench }];
   /* ================= boot: the home page and each writeup page ================= */
   function writeupBy(slug) { for (var i = 0; i < WRITING.length; i++) if (WRITING[i].slug === slug) return WRITING[i]; return null; }
   function drawFor(fn) { return function (c, W, H) { return fn(c, W, H, rng(7)); }; }
