@@ -216,8 +216,3 @@ a[target="_blank"].link::after, a[target="_blank"].out::after { content: "\2009\
 .prose .actions { margin: 6px 0 24px; }
 .prose .actions .btn { text-decoration: none; color: var(--paper); }
 /* featured work: the newest piece leads, the rest follow under the theme filters */
-#work .feature { padding-bottom: 56px; }
-#work .shelf { border-top: 1px solid var(--line); padding-top: 8px; }
-.sec-head.lead { padding-block: 40px 0; }
-#work .feature { border-top: 0; padding-top: 40px; }
-@media (max-width: 900px) { .sec-head.lead { padding-block: 28px 0; } #work .feature { padding-top: 24px; } }
