@@ -18,7 +18,7 @@ a { color: inherit; } img { max-width: 100%; height: auto; }
 /* the signature: sliced Geist 800, lowercase, the red square as its full stop */
 .wordmark { --wm: var(--ink); display: inline-flex; align-items: baseline; font-size: 46px; line-height: 1; text-decoration: none; white-space: nowrap; }
 .wordmark .wm { font: 800 1em/1.25 var(--sans); letter-spacing: -.045em; color: transparent;
-  background: repeating-linear-gradient(to bottom, var(--wm) 0 .174em, color-mix(in srgb, var(--wm) 45%, transparent) .174em .2em) 0 .02em; -webkit-background-clip: text; background-clip: text; }
+  background: repeating-linear-gradient(to bottom, var(--wm) 0 .172em, transparent .172em .2em) 0 .02em; -webkit-background-clip: text; background-clip: text; }
 .wordmark .dot { display: inline-block; width: .17em; height: .17em; margin-left: .045em; background: var(--signal); flex: none; }
 @media (max-width: 760px) { .wordmark { font-size: 38px; } }
 
